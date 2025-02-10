@@ -52,7 +52,7 @@ local Button = Tab:CreateButton({
    Name = "Zap Hub",
    Callback = function()
    -- The function that takes place when the button is pressed
-loadstring(game:HttpGet("https://scriptblox.com/raw/PETS-GO!-The-Best-Keyless-PGO-Script-ZapHub-Mining-Update-25983"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Truongthanhden23023/Zap-hub/refs/heads/main/Zaphub"))()
    end,
 })
 
