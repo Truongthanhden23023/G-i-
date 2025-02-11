@@ -80,7 +80,6 @@ loadstring(game:HttpGet(('https://raw.githubusercontent.com/Truongthanhden23023/
   end,
 })
 
-
 local Button = Tab:CreateButton({
    Name = "Crazy",
    Callback = function()
