@@ -37,7 +37,6 @@ local Window = Rayfield:CreateWindow({
 local Tab = Window:CreateTab("-->", 4483362458) -- Title, Image
 local Tab = Window:CreateTab("Cre: Nowx", 4483362458) -- Title, Image
 local Tab = Window:CreateTab("Trang chủ", 4483362458) -- Title, Image
-local Tab = Window:CreateTab("Main", 4483362458) -- Title, Image
 
 Tab:CreateLabel("Default Keybind: {K}")
 
