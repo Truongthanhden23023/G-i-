@@ -72,23 +72,6 @@ local Button = Tab:CreateButton({
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Truongthanhden23023/Pixel/refs/heads/main/Pixelfont"))()
   end,
 })
-Tab:CreateLabel("Free Gamepass Don't work all game")
-
-local Button = Tab:CreateButton({
-   Name = "Join Punch Simulator",
-   Callback = function()
-   -- The function that takes place when the button is pressed
-loadstring(game:HttpGet(('https://raw.githubusercontent.com/Truongthanhden23023/Rejoin-Punch-Simulator-/refs/heads/main/.github/Rejoin'),true))()
-  end,
-})
-
-local Button = Tab:CreateButton({
-   Name = "Crazy",
-   Callback = function()
-   -- The function that takes place when the button is pressed
-loadstring(game:HttpGet(('https://raw.githubusercontent.com/BaconBossScript/Crazy/main/Crazy'),true))()
-  end,
-})
 
 Tab:CreateLabel("Script Old item Game")
 
