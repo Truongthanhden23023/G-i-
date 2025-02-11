@@ -225,16 +225,6 @@ loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-projectCMDB
    end,
 })
 
-Tab:CreateLabel("Donate 5 Robux tuỳ :v")
-
-local Button = Tab:CreateButton({
-   Name = "Donate 5rb",
-   Callback = function()
-   -- The function that takes place when the button is pressed
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Truongthanhden23023/Donate5rb/refs/heads/main/Donate5rb"))()
-  end,
-})
-
 local Label = Tabcre:CreateLabel("Credits for you")
 
 local Button = TabMisc:CreateButton({
