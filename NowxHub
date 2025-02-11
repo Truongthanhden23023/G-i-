@@ -14,7 +14,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Xxtan31/Ata/main/delt
     print('Hello!')
 end)
 
-tab.newButton("Shit Lock", "", function()
+tab.newButton("Shit Lock", "Shitlock", function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Truongthanhden23023/Shitlock/refs/heads/main/Shit%20lock"))() 
   print('Hello!')
 end)
@@ -45,7 +45,7 @@ loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Dex-Explore
    print('Hello!')
 end)
 
-tab.newButton("Quay tay set roblox", "", function()
+tab.newButton("Quay tay set roblox", "bantumlum", function()
 loadstring(game:HttpGet("https://pastefy.app/wa3v2Vgm/raw"))("Spider Script")
     print('Hello!')
 end)
@@ -57,41 +57,41 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Truongthanhden23023/W
     print('Hello!')
 end)
 
-tab.newButton("HOHO HUB V4", "", function()
+tab.newButton("HOHO HUB V4", "Blox Fruit", function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Truongthanhden23023/hohohub/refs/heads/main/Hoho%20hub"))()
     print('Hello!')
 end)
 
-tab.newButton("ATTACK HUB", "", function()
+tab.newButton("ATTACK HUB", "Blox Fruit", function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Truongthanhden23023/Attackhub/refs/heads/main/Attackhub"))()
     print('Hello!')
 end)
 
-tab.newButton("Blue X Hub", "Prints Hello!", function()
+tab.newButton("Blue X Hub", "Blox Fruit", function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Truongthanhden23023/Blue-X-Hub/refs/heads/main/.github/workflows/Bluexhub"))()    
     print('Hello!')
 end)
 
-tab.newButton("Quantum Onyx Project", "", function()
+tab.newButton("Quantum Onyx Project", "Blox Fruit", function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/FlazhGG/QTONYX/refs/heads/main/NextGeneration.lua"))()
     print('Hello!')
 end)
 
-tab.newButton("Redz", "", function()
+tab.newButton("Redz", "Blox Fruit", function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Truongthanhden23023/Redz/refs/heads/main/REDZ"))()
     print('Hello!')
 end)
 
-local tab = DrRayLibrary.newTab("Fruit Farm", "ImageIdHere")
+local tab = DrRayLibrary.newTab("Fruit Farm Blox Fruit", "ImageIdHere")
 
-tab.newButton("Zenith Hub Fruit Farm", "", function()
+tab.newButton("Zenith Hub Fruit Farm", "Fruit Farm", function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Truongthanhden23023/Zenith-h-fruit-fram/refs/heads/main/Fruit%20fram", true))()
     print('Hello!')
 end)
 
 local tab = DrRayLibrary.newTab("Pet Go", "ImageIdHere")
 
-tab.newButton("Speed X Hub", "", function()
+tab.newButton("Speed X Hub", "PET Go", function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
     print('Hello!')
 end)
