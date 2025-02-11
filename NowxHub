@@ -167,9 +167,9 @@ local Button = Tab:CreateButton({
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Truongthanhden23023/Join-game-FREE-ADMIN-a-literal-baseplate/refs/heads/main/Join%20game"))()
    end,
 })
-Tab:CreateLabel("sau khi ấn join game và khi ấn C00l-Ware và gõ ;radio trong ⭐️[FREE ADMIN] a literal baseplate vào execute")
+Tab:CreateLabel("sau khi ấn join game và khi ấn projectcmdbar v1 và gõ ;radio trong ⭐️[FREE ADMIN] a literal baseplate vào execute")
 local Button = Tab:CreateButton({
-   Name = "C00l-Ware",
+   Name = "projectcmdbar v1",
    Callback = function()
    -- The function that takes place when the button is pressed
 loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-projectCMDBAR-16747"))()
