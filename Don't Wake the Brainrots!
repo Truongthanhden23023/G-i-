@@ -1,191 +1,223 @@
--- 🧠 Don't Wake the Brainrots! (Mini GUI)
+-- Don't Wake the Brainrots! Mini GUI Full + Auto Upgrade Toggle
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 
--- GUI chính
+-- ===== Create GUI =====
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "BrainrotMiniGUI"
 ScreenGui.Parent = game.CoreGui
 
--- Khung chính
 local Frame = Instance.new("Frame")
 Frame.Parent = ScreenGui
-Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-Frame.Size = UDim2.new(0, 180, 0, 280)
-Frame.Position = UDim2.new(0.05, 0, 0.35, 0)
+Frame.Size = UDim2.new(0, 180, 0, 260)
+Frame.Position = UDim2.new(0.05,0,0.35,0)
+Frame.BackgroundColor3 = Color3.fromRGB(25,25,35)
 Frame.Active = true
 Frame.Draggable = true
 
--- Viền & bo góc
-local UIStroke = Instance.new("UIStroke")
-UIStroke.Parent = Frame
-UIStroke.Color = Color3.fromRGB(190, 0, 255)
+local UIStroke = Instance.new("UIStroke", Frame)
+UIStroke.Color = Color3.fromRGB(190,0,255)
 UIStroke.Thickness = 2
 
-local UICorner = Instance.new("UICorner")
-UICorner.Parent = Frame
-UICorner.CornerRadius = UDim.new(0, 10)
+local UICorner = Instance.new("UICorner", Frame)
+UICorner.CornerRadius = UDim.new(0,10)
 
--- Nền ảnh decal
-local BG = Instance.new("ImageLabel")
-BG.Parent = Frame
-BG.Size = UDim2.new(1, 0, 1, 0)
+local BG = Instance.new("ImageLabel", Frame)
+BG.Size = UDim2.new(1,0,1,0)
+BG.Position = UDim2.new(0,0,0,0)
 BG.BackgroundTransparency = 1
-BG.ImageTransparency = 0.4
 BG.Image = "rbxassetid://18433846547"
+BG.ImageTransparency = 0.4
 BG.ZIndex = 0
 
--- Tiêu đề
-local Title = Instance.new("TextLabel")
-Title.Parent = Frame
-Title.Text = "🧠 Don't Wake the Brainrots!"
-Title.Size = UDim2.new(1, 0, 0, 25)
+local Title = Instance.new("TextLabel", Frame)
+Title.Size = UDim2.new(1,0,0,25)
+Title.Position = UDim2.new(0,0,0,0)
 Title.BackgroundTransparency = 1
-Title.TextColor3 = Color3.fromRGB(255, 200, 255)
+Title.Text = "🧠 Don't Wake the Brainrots!"
+Title.TextColor3 = Color3.fromRGB(255,200,255)
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 14
 Title.ZIndex = 2
 
--- Hàm tạo nút
-local function createButton(txt, y)
+-- ===== Buttons =====
+local function createButton(text, y)
 	local b = Instance.new("TextButton")
 	b.Parent = Frame
-	b.Size = UDim2.new(0, 160, 0, 25)
-	b.Position = UDim2.new(0, 10, 0, y)
-	b.BackgroundColor3 = Color3.fromRGB(55, 55, 75)
-	b.TextColor3 = Color3.fromRGB(255, 255, 255)
+	b.Size = UDim2.new(0,160,0,25)
+	b.Position = UDim2.new(0,10,0,y)
+	b.BackgroundColor3 = Color3.fromRGB(55,55,75)
+	b.TextColor3 = Color3.fromRGB(255,255,255)
 	b.Font = Enum.Font.GothamBold
 	b.TextSize = 12
-	b.Text = txt
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 6)
-	corner.Parent = b
+	b.Text = text
+	local c = Instance.new("UICorner", b)
+	c.CornerRadius = UDim.new(0,6)
 	return b
 end
 
--- Nút Toggle GUI
-local ToggleButton = Instance.new("ImageButton")
-ToggleButton.Parent = ScreenGui
-ToggleButton.Size = UDim2.new(0, 35, 0, 35)
-ToggleButton.Position = UDim2.new(0.02, 0, 0.3, 0)
-ToggleButton.BackgroundTransparency = 1
-ToggleButton.Image = "rbxassetid://18433843123"
-ToggleButton.ImageColor3 = Color3.fromRGB(190, 0, 255)
-
--- Nút chính
 local TPButton = createButton("TP Safe Zone", 35)
-local AutoTPButton = createButton("Auto TP: OFF", 65)
-local AutoUpgradeButton = createButton("Auto Upgrade: OFF", 95)
+local TPBrainrotButton = createButton("TP Brainrots", 65)
+local AutoTPButton = createButton("Auto TP: OFF", 95)
 local AutoBuyButton = createButton("Auto Buy Lucky: OFF", 125)
 local AutoCollectButton = createButton("Auto Collect: OFF", 155)
-local AutoPlaceButton = createButton("Auto Place: OFF", 185)
-local AutoOpenButton = createButton("Auto Open: OFF", 215)
+local ESPButton = createButton("ESP Brainrots: OFF", 185)
+local AutoUpgradeButton = createButton("Auto Upgrade: OFF", 215)
 
--- Biến
-local guiVisible = true
-local toggles = {
-	[AutoTPButton] = {false, "Auto TP"},
-	[AutoUpgradeButton] = {false, "Auto Upgrade"},
-	[AutoBuyButton] = {false, "Auto Buy Lucky"},
-	[AutoCollectButton] = {false, "Auto Collect"},
-	[AutoPlaceButton] = {false, "Auto Place"},
-	[AutoOpenButton] = {false, "Auto Open"},
+-- Toggle GUI button
+local ToggleButton = Instance.new("ImageButton", ScreenGui)
+ToggleButton.Size = UDim2.new(0,35,0,35)
+ToggleButton.Position = UDim2.new(0.02,0,0.3,0)
+ToggleButton.BackgroundTransparency = 1
+ToggleButton.Image = "rbxassetid://18433843123"
+ToggleButton.ImageColor3 = Color3.fromRGB(190,0,255)
+
+-- ===== State =====
+local state = {
+	autoTP = false,
+	autoBuy = false,
+	autoCollect = false,
+	autoUpgrade = false,
+	guiVisible = true
 }
 
--- Toggle GUI
+local function setToggle(btn, key)
+	state[key] = not state[key]
+	btn.Text = btn.Text:match(".*:") .. " " .. (state[key] and "ON" or "OFF")
+	btn.BackgroundColor3 = state[key] and Color3.fromRGB(120,0,180) or Color3.fromRGB(55,55,75)
+end
+
+-- ===== Button Events =====
 ToggleButton.MouseButton1Click:Connect(function()
-	guiVisible = not guiVisible
-	Frame.Visible = guiVisible
+	state.guiVisible = not state.guiVisible
+	Frame.Visible = state.guiVisible
 end)
 
--- TP Safe Zone
 TPButton.MouseButton1Click:Connect(function()
 	local c = LocalPlayer.Character
 	if c and c:FindFirstChild("HumanoidRootPart") then
-		c.HumanoidRootPart.CFrame = CFrame.new(-24, -3.48700094, -153.500031)
+		c.HumanoidRootPart.CFrame = CFrame.new(-24, -3.487, -153.5)
 	end
 end)
 
--- Tạo toggle đúng chữ
-for btn, info in pairs(toggles) do
-	btn.MouseButton1Click:Connect(function()
-		info[1] = not info[1]
-		btn.Text = info[2] .. ": " .. (info[1] and "ON" or "OFF")
-		btn.BackgroundColor3 = info[1] and Color3.fromRGB(120, 0, 180) or Color3.fromRGB(55, 55, 75)
-	end)
-end
-
--- Lấy candy
-local function getCandyParts()
-	local t = {}
-	local f = workspace:FindFirstChild("CandyPickups")
-	if not f then return t end
-	for _, a in pairs(f:GetChildren()) do
-		if a:IsA("BasePart") then table.insert(t, a)
-		else
-			for _, b in pairs(a:GetChildren()) do
-				if b:IsA("BasePart") then table.insert(t, b) end
+-- TP Brainrots theo thứ tự mỗi lần bấm
+local brainrotIndex = 1
+TPBrainrotButton.MouseButton1Click:Connect(function()
+	local char = LocalPlayer.Character
+	local hrp = char and char:FindFirstChild("HumanoidRootPart")
+	local brainrots = workspace:FindFirstChild("Brainrots")
+	if hrp and brainrots then
+		local brList = brainrots:GetChildren()
+		if #brList == 0 then return end
+		
+		if brainrotIndex > #brList then
+			brainrotIndex = 1
+		end
+		
+		local br = brList[brainrotIndex]
+		if br:IsA("Model") then
+			local firstPart = nil
+			for _, part in pairs(br:GetDescendants()) do
+				if part:IsA("BasePart") then
+					firstPart = part
+					break
+				end
+			end
+			if firstPart then
+				pcall(function()
+					hrp.CFrame = CFrame.new(firstPart.Position + Vector3.new(0,3,0))
+				end)
 			end
 		end
+		
+		brainrotIndex = brainrotIndex + 1
 	end
-	return t
-end
+end)
 
--- Auto TP
+AutoTPButton.MouseButton1Click:Connect(function()
+	setToggle(AutoTPButton, "autoTP")
+end)
+
+AutoBuyButton.MouseButton1Click:Connect(function()
+	setToggle(AutoBuyButton, "autoBuy")
+end)
+
+AutoCollectButton.MouseButton1Click:Connect(function()
+	setToggle(AutoCollectButton, "autoCollect")
+end)
+
+ESPButton.MouseButton1Click:Connect(function()
+	setToggle(ESPButton, "esp")
+end)
+
+AutoUpgradeButton.MouseButton1Click:Connect(function()
+	setToggle(AutoUpgradeButton, "autoUpgrade")
+end)
+
+-- ===== Auto TP CandyPickups =====
 task.spawn(function()
-	while task.wait(1) do
-		if toggles[AutoTPButton][1] then
-			local c = LocalPlayer.Character
-			local hrp = c and c:FindFirstChild("HumanoidRootPart")
-			if hrp then
-				for _, part in pairs(getCandyParts()) do
-					hrp.CFrame = part.CFrame + Vector3.new(0, 2, 0)
-					task.wait(0.25)
+	while task.wait(0.05) do
+		if state.autoTP then
+			local char = LocalPlayer.Character
+			local hrp = char and char:FindFirstChild("HumanoidRootPart")
+			local folder = workspace:FindFirstChild("CandyPickups")
+			if hrp and folder then
+				for _, child in pairs(folder:GetChildren()) do
+					local targetParts = {}
+					if child:IsA("BasePart") then
+						table.insert(targetParts, child)
+					else
+						for _, sub in pairs(child:GetChildren()) do
+							if sub:IsA("BasePart") then
+								table.insert(targetParts, sub)
+							end
+						end
+					end
+					for _, part in pairs(targetParts) do
+						pcall(function()
+							hrp.CFrame = CFrame.new(part.Position + Vector3.new(0,3,0))
+						end)
+						task.wait(0.01)
+					end
 				end
 			end
 		end
 	end
 end)
 
--- Auto Upgrade
+-- ===== Auto Buy LuckyBlock =====
 task.spawn(function()
-	while task.wait(0.5) do
-		if toggles[AutoUpgradeButton][1] then
+	while task.wait(1.5) do
+		if state.autoBuy then
 			pcall(function()
-				ReplicatedStorage.Remotes.UpgradeEvent:FireServer(math.random(1, 999999999))
+				local remote = ReplicatedStorage:FindFirstChild("Remotes")
+				if remote then
+					local buyRemote = remote:FindFirstChild("AttemptHalloweenLuckyBlockPurchase")
+					if buyRemote and buyRemote.InvokeServer then
+						buyRemote:InvokeServer()
+					end
+				end
 			end)
 		end
 	end
 end)
 
--- Auto Buy Lucky
+-- ===== Auto Collect Bases->Platforms->Collect =====
 task.spawn(function()
-	while task.wait(1) do
-		if toggles[AutoBuyButton][1] then
-			pcall(function()
-				ReplicatedStorage.Remotes.AttemptHalloweenLuckyBlockPurchase:InvokeServer()
-			end)
-		end
-	end
-end)
-
--- Auto Collect
-task.spawn(function()
-	while task.wait(1) do
-		if toggles[AutoCollectButton][1] then
-			local c = LocalPlayer.Character
-			local hrp = c and c:FindFirstChild("HumanoidRootPart")
+	while task.wait(0.05) do
+		if state.autoCollect then
+			local char = LocalPlayer.Character
+			local hrp = char and char:FindFirstChild("HumanoidRootPart")
 			if hrp and workspace:FindFirstChild("Bases") then
 				for _, base in pairs(workspace.Bases:GetChildren()) do
 					local platforms = base:FindFirstChild("Platforms")
 					if platforms then
-						for _, p in pairs(platforms:GetChildren()) do
-							local collect = p:FindFirstChild("Collect")
+						for _, plat in pairs(platforms:GetChildren()) do
+							local collect = plat:FindFirstChild("Collect")
 							if collect and collect:FindFirstChild("TouchInterest") then
 								pcall(function()
 									firetouchinterest(hrp, collect, 0)
-									task.wait(0.05)
 									firetouchinterest(hrp, collect, 1)
 								end)
 							end
@@ -197,26 +229,67 @@ task.spawn(function()
 	end
 end)
 
--- Auto Place
+-- ===== ESP Brainrots =====
+local brainrotESPs = {}
 task.spawn(function()
 	while task.wait(0.5) do
-		if toggles[AutoPlaceButton][1] then
-			pcall(function()
-				local args = {math.random(1, 999999999)}
-				ReplicatedStorage.Remotes.PlaceBrainrotEvent:InvokeServer(unpack(args))
-			end)
+		if state.esp then
+			local brainrots = workspace:FindFirstChild("Brainrots")
+			if brainrots then
+				for _, gui in pairs(brainrotESPs) do
+					if gui and gui.Parent then gui:Destroy() end
+				end
+				brainrotESPs = {}
+
+				for _, br in pairs(brainrots:GetChildren()) do
+					if br:IsA("Model") then
+						local firstPart = nil
+						for _, part in pairs(br:GetDescendants()) do
+							if part:IsA("BasePart") then
+								firstPart = part
+								break
+							end
+						end
+						if firstPart then
+							local billboard = Instance.new("BillboardGui")
+							billboard.Size = UDim2.new(0,100,0,40)
+							billboard.Adornee = firstPart
+							billboard.AlwaysOnTop = true
+							billboard.Parent = firstPart
+
+							local label = Instance.new("TextLabel")
+							label.Size = UDim2.new(1,0,1,0)
+							label.BackgroundTransparency = 1
+							label.TextColor3 = Color3.fromRGB(255,50,50)
+							label.Font = Enum.Font.GothamBold
+							label.TextSize = 14
+							label.Text = br.Name
+							label.Parent = billboard
+
+							table.insert(brainrotESPs, billboard)
+						end
+					end
+				end
+			end
 		end
 	end
 end)
 
--- Auto Open
+-- ===== Auto Upgrade Loop =====
+local UpgradeRemote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("UpgradeEvent")
+local currentUpgrade = 1
+
 task.spawn(function()
-	while task.wait(0.5) do
-		if toggles[AutoOpenButton][1] then
+	while true do
+		task.wait(0.05)
+		if state.autoUpgrade then
 			pcall(function()
-				local args = {math.random(1, 999999999)}
-				ReplicatedStorage.Remotes.OpenLuckyBlock:InvokeServer(unpack(args))
+				UpgradeRemote:FireServer(currentUpgrade)
 			end)
+			currentUpgrade = currentUpgrade + 1
+			if currentUpgrade > 50 then
+				currentUpgrade = 1
+			end
 		end
 	end
 end)
