@@ -1,92 +1,99 @@
--- 👻 GUI: Don't Wake the Brainrots! 👻
+-- 🧠 Don't Wake the Brainrots! (Mini GUI)
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = Players.LocalPlayer
 
--- Tạo GUI
+-- GUI chính
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "BrainrotControlPanel"
+ScreenGui.Name = "BrainrotMiniGUI"
 ScreenGui.Parent = game.CoreGui
 
 -- Khung chính
 local Frame = Instance.new("Frame")
 Frame.Parent = ScreenGui
 Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-Frame.Size = UDim2.new(0, 260, 0, 340)
-Frame.Position = UDim2.new(0.05, 0, 0.3, 0)
+Frame.Size = UDim2.new(0, 180, 0, 280)
+Frame.Position = UDim2.new(0.05, 0, 0.35, 0)
 Frame.Active = true
-Frame.Draggable = true -- Di chuyển được GUI
+Frame.Draggable = true
 
--- Viền + bo góc
+-- Viền & bo góc
 local UIStroke = Instance.new("UIStroke")
 UIStroke.Parent = Frame
-UIStroke.Thickness = 3
 UIStroke.Color = Color3.fromRGB(190, 0, 255)
+UIStroke.Thickness = 2
 
 local UICorner = Instance.new("UICorner")
 UICorner.Parent = Frame
-UICorner.CornerRadius = UDim.new(0, 15)
+UICorner.CornerRadius = UDim.new(0, 10)
 
--- Decal nền
+-- Nền ảnh decal
 local BG = Instance.new("ImageLabel")
 BG.Parent = Frame
 BG.Size = UDim2.new(1, 0, 1, 0)
-BG.Position = UDim2.new(0, 0, 0, 0)
-BG.Image = "rbxassetid://18433846547" -- 🎃 Bạn có thể đổi link này sang ảnh bạn thích
-BG.ImageTransparency = 0.25
 BG.BackgroundTransparency = 1
+BG.ImageTransparency = 0.4
+BG.Image = "rbxassetid://18433846547"
 BG.ZIndex = 0
 
 -- Tiêu đề
 local Title = Instance.new("TextLabel")
 Title.Parent = Frame
 Title.Text = "🧠 Don't Wake the Brainrots!"
-Title.Size = UDim2.new(1, 0, 0, 40)
+Title.Size = UDim2.new(1, 0, 0, 25)
 Title.BackgroundTransparency = 1
 Title.TextColor3 = Color3.fromRGB(255, 200, 255)
 Title.Font = Enum.Font.GothamBold
-Title.TextSize = 20
+Title.TextSize = 14
 Title.ZIndex = 2
 
--- Tạo nhanh nút
-local function createButton(text, y)
-	local btn = Instance.new("TextButton")
-	btn.Parent = Frame
-	btn.Text = text
-	btn.Size = UDim2.new(0, 230, 0, 35)
-	btn.Position = UDim2.new(0, 15, 0, y)
-	btn.BackgroundColor3 = Color3.fromRGB(55, 55, 75)
-	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-	btn.Font = Enum.Font.GothamBold
-	btn.TextSize = 14
-	btn.ZIndex = 2
+-- Hàm tạo nút
+local function createButton(txt, y)
+	local b = Instance.new("TextButton")
+	b.Parent = Frame
+	b.Size = UDim2.new(0, 160, 0, 25)
+	b.Position = UDim2.new(0, 10, 0, y)
+	b.BackgroundColor3 = Color3.fromRGB(55, 55, 75)
+	b.TextColor3 = Color3.fromRGB(255, 255, 255)
+	b.Font = Enum.Font.GothamBold
+	b.TextSize = 12
+	b.Text = txt
 	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 8)
-	corner.Parent = btn
-	return btn
+	corner.CornerRadius = UDim.new(0, 6)
+	corner.Parent = b
+	return b
 end
 
--- Các nút chính
-local TPButton = createButton("TP Safe Zone", 55)
-local AutoTPButton = createButton("Auto TP CandyPickups: OFF", 100)
-local AutoUpgradeButton = createButton("Auto Upgrade: OFF", 145)
-local AutoBuyButton = createButton("Auto Buy Lucky Block: OFF", 190)
-local AutoCollectButton = createButton("Auto Collect: OFF", 235)
-
--- Toggle GUI
+-- Nút Toggle GUI
 local ToggleButton = Instance.new("ImageButton")
 ToggleButton.Parent = ScreenGui
-ToggleButton.Size = UDim2.new(0, 50, 0, 50)
-ToggleButton.Position = UDim2.new(0.02, 0, 0.25, 0)
+ToggleButton.Size = UDim2.new(0, 35, 0, 35)
+ToggleButton.Position = UDim2.new(0.02, 0, 0.3, 0)
 ToggleButton.BackgroundTransparency = 1
-ToggleButton.Image = "rbxassetid://18433843123" -- 🧠 Nút Toggle GUI (biểu tượng Brainrot)
+ToggleButton.Image = "rbxassetid://18433843123"
 ToggleButton.ImageColor3 = Color3.fromRGB(190, 0, 255)
 
--- Biến điều khiển
-local autoTP, autoUpgrade, autoBuy, autoCollect = false, false, false, false
-local guiVisible = true
+-- Nút chính
+local TPButton = createButton("TP Safe Zone", 35)
+local AutoTPButton = createButton("Auto TP: OFF", 65)
+local AutoUpgradeButton = createButton("Auto Upgrade: OFF", 95)
+local AutoBuyButton = createButton("Auto Buy Lucky: OFF", 125)
+local AutoCollectButton = createButton("Auto Collect: OFF", 155)
+local AutoPlaceButton = createButton("Auto Place: OFF", 185)
+local AutoOpenButton = createButton("Auto Open: OFF", 215)
 
--- Nút ẩn/hiện GUI
+-- Biến
+local guiVisible = true
+local toggles = {
+	[AutoTPButton] = {false, "Auto TP"},
+	[AutoUpgradeButton] = {false, "Auto Upgrade"},
+	[AutoBuyButton] = {false, "Auto Buy Lucky"},
+	[AutoCollectButton] = {false, "Auto Collect"},
+	[AutoPlaceButton] = {false, "Auto Place"},
+	[AutoOpenButton] = {false, "Auto Open"},
+}
+
+-- Toggle GUI
 ToggleButton.MouseButton1Click:Connect(function()
 	guiVisible = not guiVisible
 	Frame.Visible = guiVisible
@@ -94,62 +101,46 @@ end)
 
 -- TP Safe Zone
 TPButton.MouseButton1Click:Connect(function()
-	local char = LocalPlayer.Character
-	if char and char:FindFirstChild("HumanoidRootPart") then
-		char.HumanoidRootPart.CFrame = CFrame.new(-24, -3.48700094, -153.500031)
+	local c = LocalPlayer.Character
+	if c and c:FindFirstChild("HumanoidRootPart") then
+		c.HumanoidRootPart.CFrame = CFrame.new(-24, -3.48700094, -153.500031)
 	end
 end)
 
--- Auto TP CandyPickups
-AutoTPButton.MouseButton1Click:Connect(function()
-	autoTP = not autoTP
-	AutoTPButton.Text = "Auto TP CandyPickups: " .. (autoTP and "ON" or "OFF")
-end)
+-- Tạo toggle đúng chữ
+for btn, info in pairs(toggles) do
+	btn.MouseButton1Click:Connect(function()
+		info[1] = not info[1]
+		btn.Text = info[2] .. ": " .. (info[1] and "ON" or "OFF")
+		btn.BackgroundColor3 = info[1] and Color3.fromRGB(120, 0, 180) or Color3.fromRGB(55, 55, 75)
+	end)
+end
 
--- Auto Upgrade
-AutoUpgradeButton.MouseButton1Click:Connect(function()
-	autoUpgrade = not autoUpgrade
-	AutoUpgradeButton.Text = "Auto Upgrade: " .. (autoUpgrade and "ON" or "OFF")
-end)
-
--- Auto Buy Lucky Block
-AutoBuyButton.MouseButton1Click:Connect(function()
-	autoBuy = not autoBuy
-	AutoBuyButton.Text = "Auto Buy Lucky Block: " .. (autoBuy and "ON" or "OFF")
-end)
-
--- Auto Collect
-AutoCollectButton.MouseButton1Click:Connect(function()
-	autoCollect = not autoCollect
-	AutoCollectButton.Text = "Auto Collect: " .. (autoCollect and "ON" or "OFF")
-end)
-
--- Hàm lấy CandyPickups
-local function getAllCandyParts()
-	local parts = {}
-	local folder = workspace:FindFirstChild("CandyPickups")
-	if not folder then return parts end
-	for _, a in pairs(folder:GetChildren()) do
-		if a:IsA("BasePart") then
-			table.insert(parts, a)
+-- Lấy candy
+local function getCandyParts()
+	local t = {}
+	local f = workspace:FindFirstChild("CandyPickups")
+	if not f then return t end
+	for _, a in pairs(f:GetChildren()) do
+		if a:IsA("BasePart") then table.insert(t, a)
 		else
 			for _, b in pairs(a:GetChildren()) do
-				if b:IsA("BasePart") then table.insert(parts, b) end
+				if b:IsA("BasePart") then table.insert(t, b) end
 			end
 		end
 	end
-	return parts
+	return t
 end
 
 -- Auto TP
 task.spawn(function()
 	while task.wait(1) do
-		if autoTP then
-			local char = LocalPlayer.Character
-			local hrp = char and char:FindFirstChild("HumanoidRootPart")
+		if toggles[AutoTPButton][1] then
+			local c = LocalPlayer.Character
+			local hrp = c and c:FindFirstChild("HumanoidRootPart")
 			if hrp then
-				for _, part in pairs(getAllCandyParts()) do
-					hrp.CFrame = part.CFrame + Vector3.new(0, 3, 0)
+				for _, part in pairs(getCandyParts()) do
+					hrp.CFrame = part.CFrame + Vector3.new(0, 2, 0)
 					task.wait(0.25)
 				end
 			end
@@ -159,22 +150,22 @@ end)
 
 -- Auto Upgrade
 task.spawn(function()
-	local event = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("UpgradeEvent")
-	while task.wait(0.3) do
-		if autoUpgrade then
+	while task.wait(0.5) do
+		if toggles[AutoUpgradeButton][1] then
 			pcall(function()
-				event:FireServer(math.random(1, 9999999))
+				ReplicatedStorage.Remotes.UpgradeEvent:FireServer(math.random(1, 999999999))
 			end)
 		end
 	end
 end)
 
--- Auto Buy Lucky Block
+-- Auto Buy Lucky
 task.spawn(function()
-	local event = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("AttemptHalloweenLuckyBlockPurchase")
 	while task.wait(1) do
-		if autoBuy then
-			pcall(function() event:InvokeServer() end)
+		if toggles[AutoBuyButton][1] then
+			pcall(function()
+				ReplicatedStorage.Remotes.AttemptHalloweenLuckyBlockPurchase:InvokeServer()
+			end)
 		end
 	end
 end)
@@ -182,23 +173,50 @@ end)
 -- Auto Collect
 task.spawn(function()
 	while task.wait(1) do
-		if autoCollect then
-			local char = LocalPlayer.Character
-			local hrp = char and char:FindFirstChild("HumanoidRootPart")
+		if toggles[AutoCollectButton][1] then
+			local c = LocalPlayer.Character
+			local hrp = c and c:FindFirstChild("HumanoidRootPart")
 			if hrp and workspace:FindFirstChild("Bases") then
 				for _, base in pairs(workspace.Bases:GetChildren()) do
-					for _, platform in pairs(base:FindFirstChild("Platforms"):GetChildren()) do
-						local collect = platform:FindFirstChild("Collect")
-						if collect and collect:FindFirstChild("TouchInterest") then
-							pcall(function()
-								firetouchinterest(hrp, collect, 0)
-								task.wait(0.05)
-								firetouchinterest(hrp, collect, 1)
-							end)
+					local platforms = base:FindFirstChild("Platforms")
+					if platforms then
+						for _, p in pairs(platforms:GetChildren()) do
+							local collect = p:FindFirstChild("Collect")
+							if collect and collect:FindFirstChild("TouchInterest") then
+								pcall(function()
+									firetouchinterest(hrp, collect, 0)
+									task.wait(0.05)
+									firetouchinterest(hrp, collect, 1)
+								end)
+							end
 						end
 					end
 				end
 			end
+		end
+	end
+end)
+
+-- Auto Place
+task.spawn(function()
+	while task.wait(0.5) do
+		if toggles[AutoPlaceButton][1] then
+			pcall(function()
+				local args = {math.random(1, 999999999)}
+				ReplicatedStorage.Remotes.PlaceBrainrotEvent:InvokeServer(unpack(args))
+			end)
+		end
+	end
+end)
+
+-- Auto Open
+task.spawn(function()
+	while task.wait(0.5) do
+		if toggles[AutoOpenButton][1] then
+			pcall(function()
+				local args = {math.random(1, 999999999)}
+				ReplicatedStorage.Remotes.OpenLuckyBlock:InvokeServer(unpack(args))
+			end)
 		end
 	end
 end)
